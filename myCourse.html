@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <title>我的课程</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no minimal-ui">
+    <meta content="telephone=no" name="format-detection">
+    <link href="./myCourseFolder/main.css" rel="stylesheet" type="text/css">
+    <link href="./myCourseFolder/calendar.css" rel="stylesheet" type="text/css">
+    <link href="./myCourseFolder/myCourse.css" rel="stylesheet" type="text/css">
+    <script src="./myCourseFolder/jquery.js"></script>
+    <script src="./myCourseFolder/template-debug.js"></script>
+    <script src="./myCourseFolder/calendar.js"></script>
+    
+</head>
+
+<body style="background-color:#F7FBFE;">
+    <div id="content">
+        <div id="calendarDisplay" class="border-bottom backff">
+            <div id="calendarDisplayLeft">
+                <script type="text/html" id="template-calendarDisplay">
+                    <span class="font30 bold">{{month}}月</span>
+                    <span class="font12 light-color" style="flex:1">
+                        {{text}}<br/>
+                        {{year}}
+                    </span>
+                </script>
+            </div>
+            <img src="./myCourseFolder/images/classTable.svg" alt class="switchCourseMode" id="switchCourseMode"
+            />
+        </div>
+        <div id="courseContent">
+            <div class="calendarMode">
+                <div id="calendarContainer" class="border-bottom">
+
+                </div>
+                <div id="courseList" class="padding-15">
+                    <script id="template-courseList" type="text/html">
+                        {{each items as item}}
+                        <div class=" card courseItem card-link" data-id="{{item.courseId}}" data-type="{{item.type}}">
+                            <div>
+                                <div class="light-color flex-align-center timeLine">
+                                    <span>{{item.date}}&nbsp;&nbsp;{{item.time}}</span>
+                                    {{if items.showCourseStatus}}
+                                    <i class="margin-left-10 point back-{{['orange','green','pink','red'][['new','attendance','absence','studentLeave',].indexOf(item.status)]}}-color margin-right-5"></i>
+                                    <span class="vertical-middle">{{['未上课','已上课','缺勤','已请假'][['new','attendance','absence','studentLeave',].indexOf(item.status)]}}</span>
+                                    {{/if}}
+                                </div>
+                                <div class="font17 margin-top-10 margin-bottom-10 bold">{{item.className}}</div>
+                                <div>
+                                    <div class="light-color normal-show-info-line flex-align-center"><img src="./myCourseFolder/images/grade.svg" />{{item.gradeName}}&nbsp;{{item.subjectName}}</div>
+                                    <div class="light-color normal-show-info-line flex-align-center"><img src="./myCourseFolder/images/position.svg" />{{item.organizationName}}&nbsp;{{item.roomName}}</div>
+                                    {{if item.seat}}
+                                    <div class="light-color normal-show-info-line flex-align-center">
+                                        <img src="./myCourseFolder/images/seat.svg" />{{item.seat}}号座位（第{{item.seatRow}}排－第{{item.seatColumn}}列）
+                                    </div>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </script>
+                </div>
+                <div id="noDataContainer" style="display:none;">
+                    <div id="noData" class="noData">
+                        <img src="./myCourseFolder/images/noData.svg">
+                        <div>这天，暂无课程哦~</div>
+                    </div>
+                </div>
+            </div>
+            <div class="classTableMode">
+                <div id="courseTable">
+                    <script id="template-courseTable" type="text/html">
+                        <div id="courseTableHead">
+                            <div class="border-right border-bottom"></div>
+                            <div id="courseTableThContainer" class="border-bottom">
+                                <div id="courseTableThList">
+                                    <div>{{include 'template-date' preDates}}</div>
+                                    <div>{{include 'template-date' dates}}</div>
+                                    <div>{{include 'template-date' nextDates}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="courseTableBodyContainer">
+                            <div id="courseTableBody">
+                                <div id="courseTimeContainer" class="border-right">
+                                    <div>08:00</div>
+                                    <div>09:00</div>
+                                    <div>10:00</div>
+                                    <div>11:00</div>
+                                    <div>12:00</div>
+                                    <div>13:00</div>
+                                    <div>14:00</div>
+                                    <div>15:00</div>
+                                    <div>16:00</div>
+                                    <div>17:00</div>
+                                    <div>18:00</div>
+                                    <div>19:00</div>
+                                    <div>20:00</div>
+                                    <div>21:00</div>
+                                    <div>22:00</div>
+                                </div>
+                                <div id="courseTimeList">
+                                    {{each dates.items as item}}
+                                    <div data-date="{{item.date}}"></div>
+                                    {{/each}}
+                                </div>
+                            </div>
+                        </div>
+                    </script>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script id="template-date" type="text/html">
+            {{each items as item}}
+                <div>
+                    <div class="light-color courseDate">{{item.date.substring(8)}}</div>
+                    <div>{{item.dayCn}}</div>
+                </div>
+            {{/each}}
+        </script>
+        <script id="template-courseTableItem" type="text/html">
+        {{each items as item}}
+        <div class="courseItem" style="height:{{item.height}}px;top:{{item.top}}px;background-color:{{item.backgroundColor}}" data-id="{{item.courseId}}" data-type="{{item.type}}">
+            <div class="courseItem__subjectName">{{item.subjectName}}</div>
+            {{if item.gradeName}}<div class="courseItem__gradeName">{{item.gradeName}}</div>{{/if}}
+        </div>
+        {{/each}}
+    </script>
+    <script src="./myCourseFolder/myCourse.js"></script>
+</body>
+
+</html>
